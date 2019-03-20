@@ -1,15 +1,15 @@
 {
   "name": "JKWechatHelper",
   "version": "0.1.0",
-  "summary": "A short description of JKWechatHelper.",
-  "description": "TODO: Add long description of the pod here.",
+  "summary": "this is a tool to helper developer to use wechat sdk.",
+  "description": "this is a tool to helper developer to use wechat sdk.it will update with the need",
   "homepage": "https://github.com/xindizhiyin2014/JKWechatHelper",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "xindizhiyin2014": "jack18@same.com"
+    "xindizhiyin2014": "929097264@qq.com"
   },
   "source": {
     "git": "https://github.com/xindizhiyin2014/JKWechatHelper.git",
@@ -18,5 +18,14 @@
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "JKWechatHelper/Classes/**/*"
+  "static_framework": true,
+  "source_files": "JKWechatHelper/Classes/**/*",
+  "dependencies": {
+    "WechatOpenSDK": [
+
+    ],
+    "JKDataHelper": [
+
+    ]
+  }
 }

@@ -1,6 +1,10 @@
 PODS:
-  - JKWechatHelper (0.1.0)
+  - JKDataHelper (0.1.15)
+  - JKWechatHelper (0.1.0):
+    - JKDataHelper
+    - WechatOpenSDK
   - Kiwi (3.0.0)
+  - WechatOpenSDK (1.8.4)
 
 DEPENDENCIES:
   - JKWechatHelper (from `../`)
@@ -8,15 +12,19 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - JKDataHelper
     - Kiwi
+    - WechatOpenSDK
 
 EXTERNAL SOURCES:
   JKWechatHelper:
     :path: "../"
 
 SPEC CHECKSUMS:
-  JKWechatHelper: 98c5ba987180f6e00f9d4d3e074182aeea67f320
+  JKDataHelper: 35d51f09c0bc2efcab7100e6632f35821af4c16a
+  JKWechatHelper: e86f2f771c8ccc5efa730534496f1ca742c45572
   Kiwi: fbeafef0f00e4d8f7dcb3420a4930afe70af77f7
+  WechatOpenSDK: 9b721089507c895d05f997408c30bb6e6f5f9b60
 
 PODFILE CHECKSUM: 77899da620fd01926f9e3f151f4591c197e3c36f
 

@@ -29,7 +29,7 @@ this is a tool to helper developer to use wechat sdk.it will update with the nee
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
-
+  s.static_framework = true
   s.source_files = 'JKWechatHelper/Classes/**/*'
   
   # s.resource_bundles = {
@@ -38,5 +38,7 @@ this is a tool to helper developer to use wechat sdk.it will update with the nee
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+   s.dependency 'WechatOpenSDK'
+   s.dependency 'JKDataHelper'
+   
 end

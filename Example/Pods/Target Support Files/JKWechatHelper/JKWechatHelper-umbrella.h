@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "JKWechatHelper.h"
 
 FOUNDATION_EXPORT double JKWechatHelperVersionNumber;
 FOUNDATION_EXPORT const unsigned char JKWechatHelperVersionString[];
