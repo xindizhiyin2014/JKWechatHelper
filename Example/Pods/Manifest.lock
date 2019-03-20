@@ -1,0 +1,23 @@
+PODS:
+  - JKWechatHelper (0.1.0)
+  - Kiwi (3.0.0)
+
+DEPENDENCIES:
+  - JKWechatHelper (from `../`)
+  - Kiwi
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Kiwi
+
+EXTERNAL SOURCES:
+  JKWechatHelper:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  JKWechatHelper: 98c5ba987180f6e00f9d4d3e074182aeea67f320
+  Kiwi: fbeafef0f00e4d8f7dcb3420a4930afe70af77f7
+
+PODFILE CHECKSUM: 77899da620fd01926f9e3f151f4591c197e3c36f
+
+COCOAPODS: 1.5.3

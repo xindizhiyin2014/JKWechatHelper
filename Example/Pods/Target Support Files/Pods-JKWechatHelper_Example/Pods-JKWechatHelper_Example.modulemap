@@ -1,0 +1,6 @@
+framework module Pods_JKWechatHelper_Example {
+  umbrella header "Pods-JKWechatHelper_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

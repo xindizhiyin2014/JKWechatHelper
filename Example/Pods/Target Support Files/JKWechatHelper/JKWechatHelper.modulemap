@@ -1,0 +1,6 @@
+framework module JKWechatHelper {
+  umbrella header "JKWechatHelper-umbrella.h"
+
+  export *
+  module * { export * }
+}
