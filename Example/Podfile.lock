@@ -1,5 +1,5 @@
 PODS:
-  - JKDataHelper (0.1.15)
+  - JKDataHelper (0.1.16.1)
   - JKWechatHelper (0.1.0):
     - JKDataHelper
     - WechatOpenSDK
@@ -21,7 +21,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  JKDataHelper: 35d51f09c0bc2efcab7100e6632f35821af4c16a
+  JKDataHelper: 9b3bb0caffe102f758f32cbafc0ef155f4b9c831
   JKWechatHelper: e86f2f771c8ccc5efa730534496f1ca742c45572
   Kiwi: fbeafef0f00e4d8f7dcb3420a4930afe70af77f7
   WechatOpenSDK: 9b721089507c895d05f997408c30bb6e6f5f9b60

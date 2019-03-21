@@ -29,7 +29,6 @@ static NSString * const JKWeiXinErrorDomain = @"JKWeiXinAPIErrorDomain"; // 微�
 @property (nonatomic, copy) wxSuccessBlock successBlock;
 @property (nonatomic, copy) wxFailureBlock failureBlock;
 @property (nonatomic, strong) NSString *authStateStr;
-@property (nonatomic, assign) NSInteger configModel;
 @end
 
 @implementation JKWechatHelper
@@ -44,8 +43,7 @@ static JKWechatHelper *_helper = nil;
 
 + (void)configModel:(NSInteger)model appId:(NSString *)appId{
     [WXApi registerApp:appId enableMTA:NO];
-    [JKWechatHelper shareInstance].configModel = model;
-    if (model != 0) {
+    if (!model) {
         [WXApi startLogByLevel:WXLogLevelDetail logDelegate:[JKWechatHelper shareInstance]];
     }
 }
@@ -162,7 +160,7 @@ static JKWechatHelper *_helper = nil;
         return;
     }
     [mParams removeObjectForKey:@"userName"];
-    WXMiniProgramType miniProgramTypetype = [JKWechatHelper shareInstance].configModel?WXMiniProgramTypePreview:WXMiniProgramTypeRelease;
+    WXMiniProgramType miniProgramTypetype = WXMiniProgramTypeRelease;
     
     if ([mParams jk_containKey:@"type"]) {
         NSInteger type = [[mParams objectForKey:@"type"] integerValue];
@@ -233,7 +231,7 @@ static JKWechatHelper *_helper = nil;
     }
     [mParams removeObjectForKey:@"userName"];
     
-    WXMiniProgramType miniProgramTypetype = [JKWechatHelper shareInstance].configModel?WXMiniProgramTypePreview:WXMiniProgramTypeRelease;
+    WXMiniProgramType miniProgramTypetype = WXMiniProgramTypeRelease;
     
     if ([mParams jk_containKey:@"type"]) {
         NSInteger type = [[mParams objectForKey:@"type"] integerValue];
@@ -295,8 +293,8 @@ static JKWechatHelper *_helper = nil;
     }
 }
 
-+ (void)weixinShareImage:(NSURL *)url extra:(NSDictionary *)extra complete:(void(id result,NSError *error))completeBlock{
-    NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[url.query jk_URLQueryDictionary]];
++ (void)wxShareImage:(NSURL *)url extra:(NSDictionary *)extra complete:(void(id result,NSError *error))completeBlock{
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[url.absoluteString jk_urlStringConvertToDictionary]];
     if (extra) {
         [params addEntriesFromDictionary:extra];
     }
@@ -349,8 +347,9 @@ static JKWechatHelper *_helper = nil;
     
 }
 
-+ (void)wxShareWithType:(NSInteger)type platform:(NSInteger)platform params:(NSDictionary *)params success:(wxSuccessBlock)success failure:(wxFailureBlock)failure{
-    
++ (void)wxShareUrlWithParams:(NSDictionary *)params
+                     success:(wxSuccessBlock)success
+                     failure:(wxFailureBlock)failure{
     [JKWechatHelper shareInstance].successBlock = success;
     [JKWechatHelper shareInstance].failureBlock = failure;
     
@@ -363,47 +362,36 @@ static JKWechatHelper *_helper = nil;
         return;
     }
     WXMediaMessage *message = [WXMediaMessage message];
-    if (type ==0) {//图片分享
-        WXImageObject *imgObject  = [WXImageObject object];
-        UIImage *image = (UIImage *)[params objectForKey:@"image"];
-        imgObject.imageData = UIImagePNGRepresentation(image);
-        message.mediaObject = imgObject;
-    }else if (type ==1){//网页分享
-        message.title = [params jk_stringForKey:@"title"];
-        message.description = [params jk_stringForKey:@"desc"];
-        WXWebpageObject *webpageObject = [WXWebpageObject object];
-        webpageObject.webpageUrl = [params jk_stringForKey:@"url"];
-    }else if (type == 2){//小程序分享
-        WXMiniProgramObject *wxMiniObejct = [WXMiniProgramObject object];
-        wxMiniObejct.userName = [params jk_stringForKey:@"userName"];
-        wxMiniObejct.path = [params jk_stringForKey:@"path"];
-        
-        UIImage *image = (UIImage *)[params objectForKey:@"image"];
-        wxMiniObejct.hdImageData = UIImagePNGRepresentation(image);
-        
-        message.title = [params jk_stringForKey:@"title"];
-        message.description = [params jk_stringForKey:@"desc"];
-        message.mediaObject = wxMiniObejct;
-        message.thumbData = nil;
-    }
+    message.title = [params jk_stringForKey:@"title"];
+    message.description = [params jk_stringForKey:@"desc"];
+    WXWebpageObject *webpageObject = [WXWebpageObject object];
+    webpageObject.webpageUrl = [params jk_stringForKey:@"url"];
     
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.message = message;
-    if (platform ==0) {//分享给好友
-        req.bText = NO;
-        req.scene = WXSceneSession;
-    }else if (platform ==1){//分享到朋友圈
-        req.bText = NO;
-        req.scene = WXSceneTimeline;
-    }
+    req.bText = NO;
+    req.scene = (int)[params jk_integerForKey:@"scene"];
     BOOL result = [WXApi sendReq:req];
     if (!result) {
-        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"微信小程序唤起失败");
+        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
         if ([JKWechatHelper shareInstance].failureBlock) {
             [JKWechatHelper shareInstance].failureBlock(error);
         }
         [self clearBlock];
     }
+
+}
+
++ (void)wxShareWithType:(NSInteger)shareType params:(NSDictionary *)params success:(wxSuccessBlock)success failure:(wxFailureBlock)failure{
+    
+    if (shareType ==0) {//图片分享
+        [self wxShareImageWithParams:params success:success failure:failure];
+    }else if (shareType ==1){//网页分享
+        [self wxShareUrlWithParams:params success:success failure:failure];
+    }else if (shareType == 2){//小程序分享
+        [self wxShareMiniProgramWithParams:params success:success failure:failure];
+    }
+    
 }
 
 
