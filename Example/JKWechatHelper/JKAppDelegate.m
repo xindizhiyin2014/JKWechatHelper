@@ -17,27 +17,27 @@
 }
 
 #pragma mark 应用 从外部打开
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return  [JKWechatHelper handleOpenURL:url];
-}
-
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options{
-    
-    if([url.scheme hasPrefix:@"wx"]){
-        return [JKWechatHelper handleOpenURL:url];
-    }
-    
-    return NO;
-}
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    
-    if([url.scheme hasPrefix:@"wx"]){
-        return [JKWechatHelper handleOpenURL:url];
-    }
-    
-    return NO;
-}
+//- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+//    return  [JKWechatHelper handleOpenURL:url];
+//}
+//
+//- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options{
+//    
+//    if([url.scheme hasPrefix:@"wx"]){
+//        return [JKWechatHelper handleOpenURL:url];
+//    }
+//    
+//    return NO;
+//}
+//
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+//    
+//    if([url.scheme hasPrefix:@"wx"]){
+//        return [JKWechatHelper handleOpenURL:url];
+//    }
+//    
+//    return NO;
+//}
 
 
 - (void)applicationWillResignActive:(UIApplication *)application
