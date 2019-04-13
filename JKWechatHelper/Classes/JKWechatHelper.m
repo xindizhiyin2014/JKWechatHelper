@@ -28,7 +28,7 @@ static NSString * const JKWeiXinErrorDomain = @"JKWeiXinAPIErrorDomain"; // 微�
 @interface JKWechatHelper()<WXApiLogDelegate,WXApiDelegate>
 @property (nonatomic, copy) wxSuccessBlock successBlock;
 @property (nonatomic, copy) wxFailureBlock failureBlock;
-@property (nonatomic, strong) NSString *authStateStr;
+@property (nonatomic, copy) NSString *authStateStr;
 @end
 
 @implementation JKWechatHelper
@@ -396,7 +396,7 @@ static JKWechatHelper *_helper = nil;
 
 
 #pragma mark private method
-+ (void)handleAuthRequest:(SendAuthResp *)resp{
+- (void)handleAuthRequest:(SendAuthResp *)resp{
     if ([resp.state isEqualToString:[JKWechatHelper shareInstance].authStateStr]){
         if (resp.errCode == WXSuccess) {
             if ([JKWechatHelper shareInstance].successBlock) {
@@ -414,10 +414,10 @@ static JKWechatHelper *_helper = nil;
             }
         }
     }
-    [self clearBlock];
+    [JKWechatHelper clearBlock];
 }
 
-+ (void)handlePayRequest:(PayResp *)resp{
+- (void)handlePayRequest:(PayResp *)resp{
     if (resp.errCode == WXSuccess) {
         if ([JKWechatHelper shareInstance].successBlock) {
             [JKWechatHelper shareInstance].successBlock(@"充值成功");
@@ -433,11 +433,11 @@ static JKWechatHelper *_helper = nil;
             [JKWechatHelper shareInstance].failureBlock(error);
         }
     }
-    [self clearBlock];
+    [JKWechatHelper clearBlock];
 }
 
 
-+ (void)handleLaunchMiniProgramResp:(WXLaunchMiniProgramResp *)resp{
+- (void)handleLaunchMiniProgramResp:(WXLaunchMiniProgramResp *)resp{
     if (resp.errCode == WXSuccess) {
         NSString *string = resp.extMsg;
         if ([JKWechatHelper shareInstance].successBlock) {
@@ -454,10 +454,10 @@ static JKWechatHelper *_helper = nil;
             [JKWechatHelper shareInstance].failureBlock(error);
         }
     }
-    [self clearBlock];
+    [JKWechatHelper clearBlock];
 }
 
-+ (void)handleSendMessageWithRep:(SendMessageToWXResp *)resp{
+- (void)handleSendMessageWithRep:(SendMessageToWXResp *)resp{
     if (resp.errCode == WXSuccess) {
         if ([JKWechatHelper shareInstance].successBlock) {
             [JKWechatHelper shareInstance].successBlock(@"分享成功");
@@ -474,11 +474,11 @@ static JKWechatHelper *_helper = nil;
             [JKWechatHelper shareInstance].failureBlock(error);
         }
     }
-    [self clearBlock];
+    [JKWechatHelper clearBlock];
 }
 
 #pragma mark - WXApiDelegate
-+ (void)onResp:(BaseResp *)resp{
+- (void)onResp:(BaseResp *)resp{
     if ([resp isKindOfClass:[SendAuthResp class]]) {
         [self handleAuthRequest:(SendAuthResp *)resp];
     }else if ([resp isKindOfClass:[PayResp class]]){
@@ -493,11 +493,11 @@ static JKWechatHelper *_helper = nil;
     }
 }
 
-+ (void)onReq:(BaseReq *)req{
+- (void)onReq:(BaseReq *)req{
     if([req isKindOfClass:[LaunchFromWXReq class]])
     {
         if ([JKWechatHelper shareInstance].successBlock) {
-            [JKWechatHelper shareInstance].successBlock(@"123213123");
+            [JKWechatHelper shareInstance].successBlock(@"");
         }
     }
 }
