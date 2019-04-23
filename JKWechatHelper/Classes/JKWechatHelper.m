@@ -201,7 +201,27 @@ static JKWechatHelper *_helper = nil;
             [JKWechatHelper shareInstance].failureBlock(error);
         }
         [self clearBlock];
+    }else{
+        if ([JKWechatHelper shareInstance].successBlock) {
+            [JKWechatHelper shareInstance].successBlock(nil);
+        }
     }
+}
+
++ (void)wxLaunchMiniProgramWithURL:(NSURL *)url
+                           success:(wxSuccessBlock)success
+                           failure:(wxFailureBlock)failure{
+    NSString *path = url.path;
+    if([path hasPrefix:@"/"]){
+        path = [path substringFromIndex:1];
+    }
+    NSString *parameterStr = [[url query] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSMutableDictionary *mParams = nil;
+    if (JKSafeStr(parameterStr)) {
+        mParams = [self convertUrlStringToDictionary:parameterStr];
+    }
+    [mParams addEntriesFromDictionary:@{@"path":path}];
+    [self wxLaunchMiniProgramWithParams:mParams success:success failure:failure];
 }
 
 
@@ -515,6 +535,23 @@ static JKWechatHelper *_helper = nil;
     
     return randomString;
 }
+
+//将url ？后的字符串转换为NSDictionary对象
++ (NSMutableDictionary *)convertUrlStringToDictionary:(NSString *)string{
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    NSArray *parameterArr = [string componentsSeparatedByString:@"&"];
+    for (NSString *parameter in parameterArr) {
+        NSArray *parameterBoby = [parameter componentsSeparatedByString:@"="];
+        if (parameterBoby.count == 2) {
+            [dic setObject:parameterBoby[1] forKey:parameterBoby[0]];
+        }else
+        {
+            JKLog(@"参数不完整");
+        }
+    }
+    return dic;
+}
+
 
 
 @end

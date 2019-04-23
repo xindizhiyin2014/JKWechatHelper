@@ -74,6 +74,11 @@ typedef void(^wxFailureBlock)(NSError *error);
 + (void)wxLaunchMiniProgramWithParams:(NSDictionary *)params
                               success:(wxSuccessBlock)success
                               failure:(wxFailureBlock)failure;
+//参数拼接在url中同上一个方法
++ (void)wxLaunchMiniProgramWithURL:(NSURL *)url
+                           success:(wxSuccessBlock)success
+                           failure:(wxFailureBlock)failure;
+
 
 
 /**

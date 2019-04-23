@@ -347,7 +347,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-JKWechatHelper_Example/Pods-JKWechatHelper_Example-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-JKWechatHelper_Example/Pods-JKWechatHelper_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/JKDataHelper/JKDataHelper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -358,7 +358,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JKWechatHelper_Example/Pods-JKWechatHelper_Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JKWechatHelper_Example/Pods-JKWechatHelper_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E6F132CAD8C8F6E56F3003AD /* [CP] Embed Pods Frameworks */ = {
@@ -369,7 +369,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-JKWechatHelper_Tests/Pods-JKWechatHelper_Tests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-JKWechatHelper_Tests/Pods-JKWechatHelper_Tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Kiwi/Kiwi.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -380,7 +380,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JKWechatHelper_Tests/Pods-JKWechatHelper_Tests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JKWechatHelper_Tests/Pods-JKWechatHelper_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
