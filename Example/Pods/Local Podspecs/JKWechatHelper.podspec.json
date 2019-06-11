@@ -1,6 +1,6 @@
 {
   "name": "JKWechatHelper",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "summary": "this is a tool to helper developer to use wechat sdk.",
   "description": "this is a tool to helper developer to use wechat sdk.it will update with the need",
   "homepage": "https://github.com/xindizhiyin2014/JKWechatHelper",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/xindizhiyin2014/JKWechatHelper.git",
-    "tag": "0.1.2"
+    "tag": "0.1.3"
   },
   "platforms": {
     "ios": "8.0"

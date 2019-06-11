@@ -313,7 +313,7 @@ static JKWechatHelper *_helper = nil;
     }
 }
 
-+ (void)wxShareImage:(NSURL *)url extra:(NSDictionary *)extra complete:(void(id result,NSError *error))completeBlock{
++ (void)wxShareImage:(NSURL *)url extra:(NSDictionary *)extra complete:(void(^)(id result,NSError *error))completeBlock{
     NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithDictionary:[url.absoluteString jk_urlStringConvertToDictionary]];
     if (extra) {
         [params addEntriesFromDictionary:extra];

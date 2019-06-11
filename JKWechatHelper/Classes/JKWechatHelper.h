@@ -108,7 +108,7 @@ typedef void(^wxFailureBlock)(NSError *error);
  @param extra 额外的参数
  @param completeBlock 完成回调
  */
-+ (void)wxShareImage:(NSURL *)url extra:(NSDictionary *)extra complete:(void(id result,NSError *error))completeBlock;
++ (void)wxShareImage:(NSURL *)url extra:(NSDictionary *)extra complete:(void(^)(id result,NSError *error))completeBlock;
 /**
  微信图片分享
  
