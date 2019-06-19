@@ -12,6 +12,9 @@ typedef void(^wxSuccessBlock)(id data);
 typedef void(^wxFailureBlock)(NSError *error);
 
 @interface JKWechatHelper : NSObject
+
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
 + (instancetype)shareInstance;
 
 /**

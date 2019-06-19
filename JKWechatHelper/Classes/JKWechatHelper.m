@@ -36,7 +36,7 @@ static JKWechatHelper *_helper = nil;
 + (instancetype)shareInstance{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _helper = [JKWechatHelper new];
+        _helper = [[self alloc] init];
     });
     return _helper;
 }
