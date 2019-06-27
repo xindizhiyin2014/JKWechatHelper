@@ -174,17 +174,27 @@ static JKWechatHelper *_helper = nil;
     [mParams removeObjectForKey:@"path"];
     
     if (!JKIsEmptyStr(path) && mParams.count > 0) {
-        __block NSInteger index = 0;
-        [mParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            if ([obj isKindOfClass:[NSString class]]) {
-                if (index == 0) {
-                    path = [path stringByAppendingFormat:@"?%@=%@", key, obj];
-                }else{
+        if ([path containsString:@"?"]) {
+            
+            [mParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                if ([obj isKindOfClass:[NSString class]]) {
                     path = [path stringByAppendingFormat:@"&%@=%@", key, obj];
                 }
-                index ++;
-            }
-        }];
+            }];
+        }else{
+            __block NSInteger index = 0;
+            [mParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                if ([obj isKindOfClass:[NSString class]]) {
+                    if (index == 0) {
+                        path = [path stringByAppendingFormat:@"?%@=%@", key, obj];
+                    }else{
+                        path = [path stringByAppendingFormat:@"&%@=%@", key, obj];
+                    }
+                    index ++;
+                }
+            }];
+        }
+        
     }
     
     
@@ -268,18 +278,28 @@ static JKWechatHelper *_helper = nil;
     [mParams removeObjectForKey:@"path"];
     
     if (!JKIsEmptyStr(path) && mParams.count > 0) {
-        __block NSInteger index = 0;
-        [mParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            if ([obj isKindOfClass:[NSString class]]) {
-                if (index == 0) {
-                    path = [path stringByAppendingFormat:@"?%@=%@", key, obj];
-                }else{
+        if ([path containsString:@"?"]) {
+            [mParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                if ([obj isKindOfClass:[NSString class]]) {
                     path = [path stringByAppendingFormat:@"&%@=%@", key, obj];
                 }
-                index ++;
-            }
-            
-        }];
+                
+            }];
+        }else{
+            __block NSInteger index = 0;
+            [mParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                if ([obj isKindOfClass:[NSString class]]) {
+                    if (index == 0) {
+                        path = [path stringByAppendingFormat:@"?%@=%@", key, obj];
+                    }else{
+                        path = [path stringByAppendingFormat:@"&%@=%@", key, obj];
+                    }
+                    index ++;
+                }
+                
+            }];
+        }
+        
     }
     
     
