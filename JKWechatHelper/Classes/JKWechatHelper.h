@@ -17,6 +17,14 @@ typedef void(^wxFailureBlock)(NSError *error);
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)shareInstance;
 
+
+/**
+ judge is the WXApp installed
+
+ @return install status
+ */
++ (BOOL)isWXAppInstalled;
+
 /**
  初始化微信sdk
 

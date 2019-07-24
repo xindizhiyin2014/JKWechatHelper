@@ -41,6 +41,10 @@ static JKWechatHelper *_helper = nil;
     return _helper;
 }
 
++ (BOOL)isWXAppInstalled{
+    return [WXApi isWXAppInstalled];
+}
+
 + (void)configModel:(NSInteger)model appId:(NSString *)appId{
     [WXApi registerApp:appId enableMTA:NO];
     if (!model) {
