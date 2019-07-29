@@ -142,6 +142,7 @@ typedef void(^wxFailureBlock)(NSError *error);
  @"desc" : 描述内容,长度不能超过1K
  @"url" : 网页的url地址,不能为空且长度不能超过10K
  @"scene" : 分享的目标场景, 0: 聊天会话界面, 1: 朋友圈, 2: 收藏, 3: 指定联系人 默认发送到会话。
+ @"thumbImg":缩略图url
  @param success 成功回调
  @param failure 失败回调
  */

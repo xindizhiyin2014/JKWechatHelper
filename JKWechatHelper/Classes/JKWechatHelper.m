@@ -405,24 +405,40 @@ static JKWechatHelper *_helper = nil;
         [self clearBlock];
         return;
     }
-    WXMediaMessage *message = [WXMediaMessage message];
-    message.title = [params jk_stringForKey:@"title"];
-    message.description = [params jk_stringForKey:@"desc"];
-    WXWebpageObject *webpageObject = [WXWebpageObject object];
-    webpageObject.webpageUrl = [params jk_stringForKey:@"url"];
-    
-    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
-    req.message = message;
-    req.bText = NO;
-    req.scene = (int)[params jk_integerForKey:@"scene"];
-    BOOL result = [WXApi sendReq:req];
-    if (!result) {
-        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
-        if ([JKWechatHelper shareInstance].failureBlock) {
+    NSString *thumbImg = [params jk_stringForKey:@"thumbImg"];
+    NSURL *url = [NSURL URLWithString:thumbImg];
+    //2.创建请求
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    //创建会话
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *downloadTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (!error) {
+            WXMediaMessage *message = [WXMediaMessage message];
+            message.title = [params jk_stringForKey:@"title"];
+            message.description = [params jk_stringForKey:@"desc"];
+            message.thumbData = data;
+            WXWebpageObject *webpageObject = [WXWebpageObject object];
+            webpageObject.webpageUrl = [params jk_stringForKey:@"url"];
+            
+            SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+            req.message = message;
+            req.bText = NO;
+            req.scene = (int)[params jk_integerForKey:@"scene"];
+            BOOL result = [WXApi sendReq:req];
+            if (!result) {
+                NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
+                if ([JKWechatHelper shareInstance].failureBlock) {
+                    [JKWechatHelper shareInstance].failureBlock(error);
+                }
+                [self clearBlock];
+            }
+        }else{
             [JKWechatHelper shareInstance].failureBlock(error);
         }
-        [self clearBlock];
-    }
+    }];
+    //执行任务
+    [downloadTask resume];
+    
 
 }
 
