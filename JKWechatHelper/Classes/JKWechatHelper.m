@@ -89,14 +89,17 @@ static JKWechatHelper *_helper = nil;
     SendAuthReq* req = [[SendAuthReq alloc ] init];
     req.scope = @"snsapi_userinfo";
     req.state = [self requestStateString];
-    BOOL result = [WXApi sendReq:req];
-    if (!result) {
-        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"无法使用微信登录");
-        if ([JKWechatHelper shareInstance].failureBlock) {
-            [JKWechatHelper shareInstance].failureBlock(error);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL result = [WXApi sendReq:req];
+        if (!result) {
+            NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"无法使用微信登录");
+            if ([JKWechatHelper shareInstance].failureBlock) {
+                [JKWechatHelper shareInstance].failureBlock(error);
+            }
+            [self clearBlock];
         }
-        [self clearBlock];
-    }
+    });
+    
 }
 
 
@@ -127,15 +130,17 @@ static JKWechatHelper *_helper = nil;
         req.package = @"Sign=WXPay";
     }
     
-    
-    BOOL result = [WXApi sendReq:req];
-    if (!result) {
-        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"微信支付失败");
-        if ([JKWechatHelper shareInstance].failureBlock) {
-            [JKWechatHelper shareInstance].failureBlock(error);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL result = [WXApi sendReq:req];
+        if (!result) {
+            NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"微信支付失败");
+            if ([JKWechatHelper shareInstance].failureBlock) {
+                [JKWechatHelper shareInstance].failureBlock(error);
+            }
+            [self clearBlock];
         }
-        [self clearBlock];
-    }
+    });
+    
 }
 
 
@@ -201,25 +206,29 @@ static JKWechatHelper *_helper = nil;
         
     }
     
-    
     WXLaunchMiniProgramReq *launchMiniProgramReq = [WXLaunchMiniProgramReq object];
     launchMiniProgramReq.userName = userName;  //拉起的小程序的username
     if (!JKIsEmptyStr(path)) {
         launchMiniProgramReq.path = path;    //拉起小程序页面的可带参路径，不填默认拉起小程序首页
     }
-    launchMiniProgramReq.miniProgramType = miniProgramTypetype; //拉起小程序的类型
-    BOOL result = [WXApi sendReq:launchMiniProgramReq];
-    if (!result) {
-        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"微信小程序唤起失败");
-        if ([JKWechatHelper shareInstance].failureBlock) {
-            [JKWechatHelper shareInstance].failureBlock(error);
+    //拉起小程序的类型
+    launchMiniProgramReq.miniProgramType = miniProgramTypetype;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL result = [WXApi sendReq:launchMiniProgramReq];
+        if (!result) {
+            NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"微信小程序唤起失败");
+            if ([JKWechatHelper shareInstance].failureBlock) {
+                [JKWechatHelper shareInstance].failureBlock(error);
+            }
+            [self clearBlock];
+        }else{
+            if ([JKWechatHelper shareInstance].successBlock) {
+                [JKWechatHelper shareInstance].successBlock(nil);
+            }
+            [self clearBlock];
         }
-        [self clearBlock];
-    }else{
-        if ([JKWechatHelper shareInstance].successBlock) {
-            [JKWechatHelper shareInstance].successBlock(nil);
-        }
-    }
+    });
+    
 }
 
 + (void)wxLaunchMiniProgramWithURL:(NSURL *)url
@@ -306,7 +315,6 @@ static JKWechatHelper *_helper = nil;
         
     }
     
-    
     WXMediaMessage *message = [WXMediaMessage message];
     message.title = [mParams jk_stringForKey:@"title"];
     WXMiniProgramObject *wxMiniObejct = [WXMiniProgramObject object];
@@ -318,7 +326,6 @@ static JKWechatHelper *_helper = nil;
     UIImage *image = (UIImage *)[params objectForKey:@"image"];
     wxMiniObejct.hdImageData = UIImageJPEGRepresentation(image, 0.3);
     
-    
     message.mediaObject = wxMiniObejct;
     
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
@@ -326,15 +333,17 @@ static JKWechatHelper *_helper = nil;
     req.bText = NO;
     req.scene = scene;
     
-    
-    BOOL result = [WXApi sendReq:req];
-    if (!result) {
-        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
-        if ([JKWechatHelper shareInstance].failureBlock) {
-            [JKWechatHelper shareInstance].failureBlock(error);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL result = [WXApi sendReq:req];
+        if (!result) {
+            NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
+            if ([JKWechatHelper shareInstance].failureBlock) {
+                [JKWechatHelper shareInstance].failureBlock(error);
+            }
+            [self clearBlock];
         }
-        [self clearBlock];
-    }
+    });
+    
 }
 
 + (void)wxShareImage:(NSURL *)url extra:(NSDictionary *)extra complete:(void(^)(id result,NSError *error))completeBlock{
@@ -379,15 +388,17 @@ static JKWechatHelper *_helper = nil;
     req.message = message;
     req.bText = NO;
     req.scene = scene;
-    
-    BOOL result = [WXApi sendReq:req];
-    if (!result) {
-        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
-        if ([JKWechatHelper shareInstance].failureBlock) {
-            [JKWechatHelper shareInstance].failureBlock(error);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL result = [WXApi sendReq:req];
+        if (!result) {
+            NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
+            if ([JKWechatHelper shareInstance].failureBlock) {
+                [JKWechatHelper shareInstance].failureBlock(error);
+            }
+            [self clearBlock];
         }
-        [self clearBlock];
-    }
+    });
+    
     
 }
 
@@ -540,14 +551,16 @@ static JKWechatHelper *_helper = nil;
     req.message = message;
     req.bText = NO;
     req.scene = (int)[params jk_integerForKey:@"scene"];
-    BOOL result = [WXApi sendReq:req];
-    if (!result) {
-        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
-        if ([JKWechatHelper shareInstance].failureBlock) {
-            [JKWechatHelper shareInstance].failureBlock(error);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL result = [WXApi sendReq:req];
+        if (!result) {
+            NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
+            if ([JKWechatHelper shareInstance].failureBlock) {
+                [JKWechatHelper shareInstance].failureBlock(error);
+            }
+            [self clearBlock];
         }
-        [self clearBlock];
-    }
+    });
 
 }
 
