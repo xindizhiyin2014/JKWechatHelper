@@ -407,39 +407,27 @@ static JKWechatHelper *_helper = nil;
     }
     NSString *thumbImg = [params jk_stringForKey:@"thumbImg"];
     NSURL *url = [NSURL URLWithString:thumbImg];
-    //2.创建请求
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    //创建会话
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *downloadTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (!error) {
-            WXMediaMessage *message = [WXMediaMessage message];
-            message.title = [params jk_stringForKey:@"title"];
-            message.description = [params jk_stringForKey:@"desc"];
-            message.thumbData = data;
-            WXWebpageObject *webpageObject = [WXWebpageObject object];
-            webpageObject.webpageUrl = [params jk_stringForKey:@"url"];
-            
-            SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
-            req.message = message;
-            req.bText = NO;
-            req.scene = (int)[params jk_integerForKey:@"scene"];
-            BOOL result = [WXApi sendReq:req];
-            if (!result) {
-                NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
+    if (!url) {
+        [self handleWxShareUrl:params data:nil];
+    }else{
+        //2.创建请求
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        //创建会话
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSessionDataTask *downloadTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (!error) {
+                [self handleWxShareUrl:params data:data];
+            }else{
                 if ([JKWechatHelper shareInstance].failureBlock) {
                     [JKWechatHelper shareInstance].failureBlock(error);
                 }
                 [self clearBlock];
             }
-        }else{
-            [JKWechatHelper shareInstance].failureBlock(error);
-        }
-    }];
-    //执行任务
-    [downloadTask resume];
+        }];
+        //执行任务
+        [downloadTask resume];
+    }
     
-
 }
 
 + (void)wxShareWithType:(NSInteger)shareType params:(NSDictionary *)params success:(wxSuccessBlock)success failure:(wxFailureBlock)failure{
@@ -535,6 +523,32 @@ static JKWechatHelper *_helper = nil;
         }
     }
     [JKWechatHelper clearBlock];
+}
+
+                                              
++ (void)handleWxShareUrl:(NSDictionary *)params data:(NSData *)data{
+    WXMediaMessage *message = [WXMediaMessage message];
+    message.title = [params jk_stringForKey:@"title"];
+    message.description = [params jk_stringForKey:@"desc"];
+    if (data){
+        message.thumbData = data;
+    }
+    WXWebpageObject *webpageObject = [WXWebpageObject object];
+    webpageObject.webpageUrl = [params jk_stringForKey:@"url"];
+    message.mediaObject = webpageObject;
+    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+    req.message = message;
+    req.bText = NO;
+    req.scene = (int)[params jk_integerForKey:@"scene"];
+    BOOL result = [WXApi sendReq:req];
+    if (!result) {
+        NSError *error = errorBuild(-100, JKWeiXinErrorDomain, @"分享失败");
+        if ([JKWechatHelper shareInstance].failureBlock) {
+            [JKWechatHelper shareInstance].failureBlock(error);
+        }
+        [self clearBlock];
+    }
+
 }
 
 #pragma mark - WXApiDelegate
